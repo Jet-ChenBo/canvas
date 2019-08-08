@@ -55,12 +55,12 @@ window.onload = function(){
        changeSize()
     }
 
-    function drawCirlce(x, y, radius){
-        ctx.beginPath()
-        ctx.arc(x,y,radius,0,Math.PI*2)
-        ctx.fill()
-        ctx.closePath()
-    }
+    // function drawCirlce(x, y, radius){
+    //     ctx.beginPath()
+    //     ctx.arc(x,y,radius,0,Math.PI*2)
+    //     ctx.fill()
+    //     ctx.closePath()
+    // }
 
     function drawLine(x1, y1, x2, y2){
         ctx.beginPath()
@@ -71,39 +71,69 @@ window.onload = function(){
         ctx.closePath()
     }
 
-    canvas.onmousedown = function(a){
-        using = true
-        var x = a.clientX
-        var y = a.clientY
-        lastPoint = {x:x, y:y}
-        if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
-    }
+    if(document.body.ontouchstart !== undefined){
+        // 触屏设备
+        canvas.ontouchstart = function(a){
+            using = true
+            var x = a.touches[0].clientX
+            var y = a.touches[0].clientY
+            lastPoint = {x:x, y:y}
+            if(usingEraser) ctx.clearRect(x-5,y-5,10,10)
+        }
 
-    canvas.onmousemove = function(a){
-        if(using){
-            var x = a.clientX
-            var y = a.clientY
-            if(usingEraser){
-                ctx.clearRect(x,y,10,10)
-            }
-            else{                
-                var newPoint = {x:x, y:y}        
-                drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-                lastPoint = newPoint               
+        canvas.ontouchmove = function(a){
+            if(using){
+                var x = a.touches[0].clientX
+                var y = a.touches[0].clientY
+                if(usingEraser){
+                    ctx.clearRect(x,y,10,10)
+                }
+                else{                
+                    var newPoint = {x:x, y:y}        
+                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                    lastPoint = newPoint               
+                }
             }
         }
-    }
 
-    canvas.onmouseup = function(){
-        using = false
+        canvas.ontouchend = function(){
+            using = false
+        }
     }
+    else{
+        // 非触屏设备
+        canvas.onmousedown = function(a){
+            using = true
+            var x = a.clientX
+            var y = a.clientY
+            lastPoint = {x:x, y:y}
+            if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
+        }
 
+        canvas.onmousemove = function(a){
+            if(using){
+                var x = a.clientX
+                var y = a.clientY
+                if(usingEraser){
+                    ctx.clearRect(x,y,10,10)
+                }
+                else{                
+                    var newPoint = {x:x, y:y}        
+                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                    lastPoint = newPoint               
+                }
+            }
+        }
+
+        canvas.onmouseup = function(){
+            using = false
+        }
+    }
 
     /*  橡皮擦 */
     var eraser = document.getElementById('eraser')
     var usingEraser = false
     eraser.onclick = function(){
         usingEraser = !usingEraser
-        console.log(usingEraser)
     }
 }
