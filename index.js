@@ -36,12 +36,24 @@ window.onload = function(){
     */
 
     var canvas = document.getElementById("canvas")
+    changeSize()
     var ctx = canvas.getContext('2d')
-    ctx.fillStyle = 'yellow'
+    //ctx.fillStyle = 'yellow'
     ctx.strokeStyle = 'yellow'
     
     var lastPoint = {x:undefined, y:undefined}
-    flag = false
+    var using = false  // 是否在用画笔或者橡皮擦
+
+    function changeSize(){
+        var pageWidth = document.documentElement.clientWidth    // 页面宽度
+        var pageHeight = document.documentElement.clientHeight  // 页面高度
+        canvas.width = pageWidth
+        canvas.height = pageHeight
+    }
+
+    window.onresize = function(){
+       changeSize()
+    }
 
     function drawCirlce(x, y, radius){
         ctx.beginPath()
@@ -60,25 +72,38 @@ window.onload = function(){
     }
 
     canvas.onmousedown = function(a){
-        flag = true
+        using = true
         var x = a.clientX
         var y = a.clientY
         lastPoint = {x:x, y:y}
-        drawCirlce(x, y, 1)
+        if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
     }
 
     canvas.onmousemove = function(a){
-        if(flag){
+        if(using){
             var x = a.clientX
             var y = a.clientY
-            var newPoint = {x:x, y:y}
-            drawCirlce(x, y, 1)
-            drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-            lastPoint = newPoint
+            if(usingEraser){
+                ctx.clearRect(x,y,10,10)
+            }
+            else{                
+                var newPoint = {x:x, y:y}        
+                drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                lastPoint = newPoint               
+            }
         }
     }
 
     canvas.onmouseup = function(){
-        flag = false
+        using = false
+    }
+
+
+    /*  橡皮擦 */
+    var eraser = document.getElementById('eraser')
+    var usingEraser = false
+    eraser.onclick = function(){
+        usingEraser = !usingEraser
+        console.log(usingEraser)
     }
 }
