@@ -43,7 +43,7 @@ window.onload = function(){
     var using = false  // 是否在用画笔或者橡皮擦
     var lineWidth = 5  // 画笔宽度
     // ctx.fillStyle = 'white'
-    ctx.strokeStyle = 'red'
+    ctx.strokeStyle = 'black'
 
     var usingEraser = false  // 是否使用橡皮擦
 
@@ -72,11 +72,20 @@ window.onload = function(){
         a.click()
     }
 
+    black.onclick = function(){
+        ctx.strokeStyle = 'black'
+        black.classList.add("active")
+        green.classList.remove("active")
+        blue.classList.remove("active")
+        red.classList.remove("active")
+    }
+
     red.onclick = function(){
         ctx.strokeStyle = 'red'
         red.classList.add("active")
         green.classList.remove("active")
         blue.classList.remove("active")
+        black.classList.remove("active")
     }
 
     green.onclick = function(){
@@ -84,6 +93,7 @@ window.onload = function(){
         green.classList.add("active")
         red.classList.remove("active")
         blue.classList.remove("active")
+        black.classList.remove("active")
     }
 
     blue.onclick = function(){
@@ -91,6 +101,7 @@ window.onload = function(){
         blue.classList.add("active")
         red.classList.remove("active")
         green.classList.remove("active")
+        black.classList.remove("active")
     }
 
     thin.onclick = function(){
@@ -113,7 +124,12 @@ window.onload = function(){
     }
 
     window.onresize = function(){
-       changeSize()
+        changeSize()
+        ctx.strokeStyle = 'black'
+        black.classList.add("active")
+        green.classList.remove("active")
+        blue.classList.remove("active")
+        red.classList.remove("active")
     }
 
     // function drawCirlce(x, y, radius){
