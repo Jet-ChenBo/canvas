@@ -1,13 +1,62 @@
-body{
-    margin: 0;
+.icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+ }
+
+ *{
+     margin: 0;
+     padding: 0;
+ }
+
+ul,ol{
+    list-style: none;
 }
 
-#canvas{
-    background: gray;
-}
-
-button{
-    position: absolute ;
+/* 画笔、橡皮擦的位置、大小和切换效果*/
+.actions{
+    position: fixed ;
     left: 0;
     top: 0;
+    padding: 10px;
+}
+
+.actions svg{
+    width: 1.5em;
+    height: 1.5em;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+}
+
+.active{
+    fill: red;
+    transform: scale(1.5)
+}
+
+/* 画笔颜色 */
+.colors{
+    position: fixed;
+    top: 50px;
+    left: 17px;
+}
+
+.colors li{
+    width: 20px;
+    height: 20px;
+    margin: 10px 0;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.colors .red{
+    background-color: red;
+}
+
+.colors .blue{
+    background-color: blue;
+}
+
+.colors .green{
+    background-color: green;
 }

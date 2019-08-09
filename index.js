@@ -36,13 +36,48 @@ window.onload = function(){
     */
 
     var canvas = document.getElementById("canvas")
+    beginDraw(canvas)
     changeSize()
     var ctx = canvas.getContext('2d')
-    //ctx.fillStyle = 'yellow'
-    ctx.strokeStyle = 'yellow'
-    
-    var lastPoint = {x:undefined, y:undefined}
+    var lastPoint = {x:undefined, y:undefined} // 上一次鼠标的位置
     var using = false  // 是否在用画笔或者橡皮擦
+    //ctx.fillStyle = 'yellow'
+    ctx.strokeStyle = 'red'
+
+    var usingEraser = false  // 是否使用橡皮擦
+
+    pen.onclick = function(){
+        usingEraser = false
+        pen.classList.add("active")
+        eraser.classList.remove("active")
+    }
+
+    eraser.onclick = function(){
+        usingEraser =true
+        eraser.classList.add("active")
+        pen.classList.remove("active")
+    }
+
+    red.onclick = function(){
+        ctx.strokeStyle = 'red'
+        red.classList.add("active")
+        green.classList.remove("active")
+        blue.classList.remove("active")
+    }
+
+    green.onclick = function(){
+        ctx.strokeStyle = 'green'
+        green.classList.add("active")
+        red.classList.remove("active")
+        blue.classList.remove("active")
+    }
+
+    blue.onclick = function(){
+        ctx.strokeStyle = 'blue'
+        blue.classList.add("active")
+        red.classList.remove("active")
+        green.classList.remove("active")
+    }
 
     function changeSize(){
         var pageWidth = document.documentElement.clientWidth    // 页面宽度
@@ -70,70 +105,64 @@ window.onload = function(){
         ctx.stroke()
         ctx.closePath()
     }
-
-    if(document.body.ontouchstart !== undefined){
-        // 触屏设备
-        canvas.ontouchstart = function(a){
-            using = true
-            var x = a.touches[0].clientX
-            var y = a.touches[0].clientY
-            lastPoint = {x:x, y:y}
-            if(usingEraser) ctx.clearRect(x-5,y-5,10,10)
-        }
-
-        canvas.ontouchmove = function(a){
-            if(using){
+    function beginDraw(canvas){
+        if(document.body.ontouchstart !== undefined){
+            // 触屏设备
+            canvas.ontouchstart = function(a){
+                using = true
                 var x = a.touches[0].clientX
                 var y = a.touches[0].clientY
-                if(usingEraser){
-                    ctx.clearRect(x,y,10,10)
-                }
-                else{                
-                    var newPoint = {x:x, y:y}        
-                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-                    lastPoint = newPoint               
+                lastPoint = {x:x, y:y}
+                if(usingEraser) ctx.clearRect(x-5,y-5,10,10)
+            }
+
+            canvas.ontouchmove = function(a){
+                if(using){
+                    var x = a.touches[0].clientX
+                    var y = a.touches[0].clientY
+                    if(usingEraser){
+                        ctx.clearRect(x,y,10,10)
+                    }
+                    else{                
+                        var newPoint = {x:x, y:y}        
+                        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                        lastPoint = newPoint               
+                    }
                 }
             }
-        }
 
-        canvas.ontouchend = function(){
-            using = false
+            canvas.ontouchend = function(){
+                using = false
+            }
         }
-    }
-    else{
-        // 非触屏设备
-        canvas.onmousedown = function(a){
-            using = true
-            var x = a.clientX
-            var y = a.clientY
-            lastPoint = {x:x, y:y}
-            if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
-        }
-
-        canvas.onmousemove = function(a){
-            if(using){
+        else{
+            // 非触屏设备
+            canvas.onmousedown = function(a){
+                using = true
                 var x = a.clientX
                 var y = a.clientY
-                if(usingEraser){
-                    ctx.clearRect(x,y,10,10)
-                }
-                else{                
-                    var newPoint = {x:x, y:y}        
-                    drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
-                    lastPoint = newPoint               
+                lastPoint = {x:x, y:y}
+                if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
+            }
+
+            canvas.onmousemove = function(a){
+                if(using){
+                    var x = a.clientX
+                    var y = a.clientY
+                    if(usingEraser){
+                        ctx.clearRect(x,y,10,10)
+                    }
+                    else{                
+                        var newPoint = {x:x, y:y}        
+                        drawLine(lastPoint.x, lastPoint.y, newPoint.x, newPoint.y)
+                        lastPoint = newPoint               
+                    }
                 }
             }
-        }
 
-        canvas.onmouseup = function(){
-            using = false
-        }
-    }
-
-    /*  橡皮擦 */
-    var eraser = document.getElementById('eraser')
-    var usingEraser = false
-    eraser.onclick = function(){
-        usingEraser = !usingEraser
+            canvas.onmouseup = function(){
+                using = false
+            }
+        } 
     }
 }
