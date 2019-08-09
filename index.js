@@ -41,7 +41,8 @@ window.onload = function(){
     var ctx = canvas.getContext('2d')
     var lastPoint = {x:undefined, y:undefined} // 上一次鼠标的位置
     var using = false  // 是否在用画笔或者橡皮擦
-    //ctx.fillStyle = 'yellow'
+    var lineWidth = 5  // 画笔宽度
+    // ctx.fillStyle = 'white'
     ctx.strokeStyle = 'red'
 
     var usingEraser = false  // 是否使用橡皮擦
@@ -56,6 +57,19 @@ window.onload = function(){
         usingEraser =true
         eraser.classList.add("active")
         pen.classList.remove("active")
+    }
+
+    clear.onclick = function(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+
+    download.onclick = function(){
+        var url = canvas.toDataURL("image/png")
+        var a = document.createElement('a')
+        document.body.appendChild(a)
+        a.href = url
+        a.download = "canvas作品"
+        a.click()
     }
 
     red.onclick = function(){
@@ -79,6 +93,14 @@ window.onload = function(){
         green.classList.remove("active")
     }
 
+    thin.onclick = function(){
+        lineWidth = 5
+    }
+
+    thick.onclick = function(){
+        lineWidth = 10
+    }
+
     function changeSize(){
         var pageWidth = document.documentElement.clientWidth    // 页面宽度
         var pageHeight = document.documentElement.clientHeight  // 页面高度
@@ -99,12 +121,13 @@ window.onload = function(){
 
     function drawLine(x1, y1, x2, y2){
         ctx.beginPath()
-        ctx.lineWidth = 5
+        ctx.lineWidth = lineWidth
         ctx.moveTo(x1, y1)
         ctx.lineTo(x2,y2)
         ctx.stroke()
         ctx.closePath()
     }
+
     function beginDraw(canvas){
         if(document.body.ontouchstart !== undefined){
             // 触屏设备
@@ -113,7 +136,7 @@ window.onload = function(){
                 var x = a.touches[0].clientX
                 var y = a.touches[0].clientY
                 lastPoint = {x:x, y:y}
-                if(usingEraser) ctx.clearRect(x-5,y-5,10,10)
+                if(usingEraser) ctx.clearRect(x-5,y-5,lineWidth*2,lineWidth*2)
             }
 
             canvas.ontouchmove = function(a){
@@ -121,7 +144,7 @@ window.onload = function(){
                     var x = a.touches[0].clientX
                     var y = a.touches[0].clientY
                     if(usingEraser){
-                        ctx.clearRect(x,y,10,10)
+                        ctx.clearRect(x,y,lineWidth*2,lineWidth*2)
                     }
                     else{                
                         var newPoint = {x:x, y:y}        
@@ -142,7 +165,7 @@ window.onload = function(){
                 var x = a.clientX
                 var y = a.clientY
                 lastPoint = {x:x, y:y}
-                if(usingEraser) ctx.clearRect(x-5,y-5,10,10)       
+                if(usingEraser) ctx.clearRect(x-5,y-5,lineWidth*2,lineWidth*2)       
             }
 
             canvas.onmousemove = function(a){
@@ -150,7 +173,7 @@ window.onload = function(){
                     var x = a.clientX
                     var y = a.clientY
                     if(usingEraser){
-                        ctx.clearRect(x,y,10,10)
+                        ctx.clearRect(x,y,lineWidth*2,lineWidth*2)
                     }
                     else{                
                         var newPoint = {x:x, y:y}        

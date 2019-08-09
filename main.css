@@ -60,3 +60,26 @@ ul,ol{
 .colors .green{
     background-color: green;
 }
+
+/* 画笔粗细 */
+.sizes{
+    position: fixed;
+    right: 20px;
+    top: 45px;
+}
+
+.sizes li{
+    margin: 20px 0;
+}
+
+.sizes .thin{
+    height: 0;
+    width: 20px;
+    border-top: 3px solid black;
+}
+
+.sizes .thick{
+    height: 0;
+    width: 20px;
+    border-top: 6px solid black;
+}
